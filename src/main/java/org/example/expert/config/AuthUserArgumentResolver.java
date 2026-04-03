@@ -4,9 +4,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.example.expert.domain.auth.exception.AuthException;
 import org.example.expert.domain.common.annotation.Auth;
 import org.example.expert.domain.common.dto.AuthUser;
-import org.example.expert.domain.user.enums.UserRole;
 import org.springframework.core.MethodParameter;
 import org.springframework.lang.Nullable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -36,12 +36,10 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
     ) {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
 
-        // JwtFilter 에서 set 한 userId, email, userRole 값을 가져옴
-        Long userId = (Long) request.getAttribute("userId");
-        String email = (String) request.getAttribute("email");
-        String nickName = (String) request.getAttribute("nickName");
-        UserRole userRole = UserRole.of((String) request.getAttribute("userRole"));
+        AuthUser authUser = (AuthUser) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
 
-        return new AuthUser(userId, email, nickName, userRole);
+        return authUser;
     }
 }
