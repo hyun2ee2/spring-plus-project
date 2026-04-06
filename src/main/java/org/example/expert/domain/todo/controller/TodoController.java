@@ -38,7 +38,7 @@ public class TodoController {
             @RequestParam(required = false) String weather,
             @RequestParam(required = false) LocalDateTime startDate,
             @RequestParam(required = false) LocalDateTime endDate
-            ) {
+    ) {
         return ResponseEntity.ok(todoService.getTodos(page, size, weather, startDate, endDate));
     }
 
@@ -54,6 +54,6 @@ public class TodoController {
             @RequestParam(required = false) LocalDateTime startDate,
             @RequestParam(required = false) LocalDateTime endDate,
             Pageable pageable) {
-        return ResponseEntity.ok(todoService.searchTodos(title, nickName,startDate, endDate, pageable));
+        return ResponseEntity.ok(todoService.searchTodos(title, nickName, startDate, endDate, pageable));
     }
 }

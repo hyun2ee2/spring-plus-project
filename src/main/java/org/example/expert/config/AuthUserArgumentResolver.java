@@ -1,17 +1,18 @@
 package org.example.expert.config;
 
-import jakarta.servlet.http.HttpServletRequest;
+import io.micrometer.common.lang.Nullable;
 import org.example.expert.domain.auth.exception.AuthException;
 import org.example.expert.domain.common.annotation.Auth;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.springframework.core.MethodParameter;
-import org.springframework.lang.Nullable;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+@Component
 public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
@@ -34,12 +35,13 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
             NativeWebRequest webRequest,
             @Nullable WebDataBinderFactory binderFactory
     ) {
-        HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
-
-        AuthUser authUser = (AuthUser) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
-
-        return authUser;
+        try {
+            AuthUser authUser = (AuthUser) SecurityContextHolder.getContext()
+                    .getAuthentication()
+                    .getPrincipal();
+            return authUser;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 }

@@ -11,9 +11,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
-    // ArgumentResolver 등록
+    private final AuthUserArgumentResolver authUserArgumentResolver;
+
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(new AuthUserArgumentResolver());
+        resolvers.add(authUserArgumentResolver);
     }
 }
